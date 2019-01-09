@@ -13,7 +13,7 @@ $printer = new Printer($connector, $profile);
 
 setlocale(LC_ALL, "cs_CZ.utf8");
 
-if($argc > 0) {
+if($argc > 1) {
 	$receipt = generate($argv[1]);
 	$receipt->doprint($printer);
 } else {
@@ -362,6 +362,7 @@ class Receipt {
 
         $this->footer($prn);
         $prn->feed(2);
+	$prn->release();
         $prn->cut();
         $prn->close();
     }
@@ -389,10 +390,10 @@ class Receipt {
     }
 
     private function footer(Printer $prn) {
-        $total = money_format('%= !.2i', $this->total(null));
-        $rounded = money_format('%= !.2i', round($this->total(null)));
-        $cash = money_format('%= !.2i', ceil($this->total(null) / 100) * 100);
-        $returned = money_format('%= !.2i', (ceil($this->total(null) / 100) * 100) - round($this->total(null)));
+        $total = number_format($this->total(null), 2, ",", " ");
+        $rounded = number_format(round($this->total(null)), 2, ",", " ");
+        $cash = number_format(ceil($this->total(null) / 100) * 100, 2, ",", " ");
+        $returned = number_format((ceil($this->total(null) / 100) * 100) - round($this->total(null)), 2, ",", " ");
         $taxb = $this->total('B');
         $taxc = $this->total('C');
 

@@ -78,5 +78,6 @@ class FilePrintConnector implements PrintConnector
             throw new Exception("PrintConnector has been closed, cannot send output.");
         }
         fwrite($this -> fp, $data);
+	fflush($this -> fp);
     }
 }
